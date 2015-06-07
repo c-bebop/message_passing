@@ -1,3 +1,10 @@
+## Erlang files:
+*.beam
+
+## IDE files:
+.idea
+.idea/*
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
