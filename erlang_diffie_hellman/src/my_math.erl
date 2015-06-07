@@ -4,8 +4,9 @@
 %%%             Florian Willich
 %%%             For more detailed information, please read the 
 %%%             licence.txt in the erlang root directory.
-%%% @doc        This is my math module for mathematical functions not provided
-%%%             by the erlang standard library.
+%%% @doc        This is my math module for mathematical 
+%%%             functions not provided by the erlang standard 
+%%%             library.
 %%% @end
 %%% Created 2015-06-06
 
@@ -13,10 +14,13 @@
 -author("Florian Willich").
 -export([pow/2]).
 
-%%% Returns the value of Base to the power of Exponent.
-%%% If Base and Exponent is 0 the function returns undefinedArithmeticExpression.
-%%% The motivation to implement this function was that there is no erlang
-%%% standard library pow function returning an integer.
+%%% @doc  Returns the value of Base to the power of Exponent.
+%%%       If Base and Exponent is 0 the function returns 
+%%%       undefinedArithmeticExpression.
+%%%       The motivation to implement this function was that 
+%%%       there is no erlang standard library pow function 
+%%%       returning an integer.
+%%% @end
 -spec pow(integer(), integer()) -> number().
 pow(0, 0) ->
   undefinedArithmeticExpression;
@@ -33,11 +37,14 @@ pow(Base, Exponent) ->
     false -> pow(Base, Exponent, 0)
   end.
 
-%%% Returns the value of Base to the power of Exponent. Acc should be 0 for
-%%% initiating computation.
-%%% If Base and Exponent is 0 the function returns undefinedArithmeticExpression.
-%%% The motivation to implement this function was that there is no erlang
-%%% standard library pow function returning an integer.
+%%% @doc  Returns the value of Base to the power of Exponent. 
+%%%       Acc should be 0 for initiating computation. If Base
+%%%       and Exponent is 0 the function returns 
+%%%       undefinedArithmeticExpression. 
+%%%       The motivation to implement this function was that 
+%%%       there is no erlang standard library pow function 
+%%%       returning an integer.
+%%% @end
 -spec pow(pos_integer(), non_neg_integer(), non_neg_integer()) -> integer().
 pow(0, 0, _) ->
   undefinedArithmeticExpression;
