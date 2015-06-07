@@ -1,0 +1,15 @@
+Message Passing 
+
+Die Kommunikation unter Verteilten Systemen kann auf verschiedene Art und Weise durchgeführt werden. 
+
+Unter bestimmten Voraussetzungen (Quelle!) können Callbacks (Funktionsaufrufe) oder die manipulation von Speicher zur Kommunikation von N ?Komponenten? dienen.
+	ODER::
+There are several machanisms of communication in distributed systems, such as remote procedure calls and remote object invocations. Both mechanisms rely on direct processing after the request. This leads to problems if the component A relies on component B to process the request, but component B is not able to process in time [Tanenbaum ... Seite 140]. 
+
+One of the most common abstract architecture is the Message-Oriented Transient Communication [Tanenbaum ... Seite 141]. TCP for example does provide all the neeeded scoket primitives [Tanenbaum ... S. 142 Figure 4-14] to build a sytem for developers, needing message based communication. 
+The Massage-Passing Interface (MPI) [Tanenbaum Seite 141] is another mechanism, made for high-performance distributed systems where high-efficiency is needed. Another goal of the MPI is to simplify the communication primitives and bring them to an abstraction level which perfectly fits the programmers need to write efficent and clean code for such distributed systems.
+
+TCP does not fit those requirements. While the socket primtives read and write are sufficient for several general-purpose protocols (managing the communication across networks) they are unsufficient for high-speed interconnection networks such as super computers or server clusters [Tanenbaum S. 143]. With the possibility of implementing propreritiery protocols, additional prmitives can simplify and speed up the communication via messages.
+
+Message Passing dient ebenso zur Kommunikation unter Verteilten Systemen. Das Prinzip ist eine Nachricht von Komponente A zu Komponente B zu schicken. Mit Nachricht ist ein digitale, abgeschlossene ?Bit-Ketten0? gemeint. 
+

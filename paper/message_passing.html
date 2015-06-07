@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Message Passing</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link rel="stylesheet" href="test.css">
+</head>
+<body>
+<header>
+<h1 class="title"><strong>Message Passing</strong></h1>
+</header>
+<nav id="TOC">
+<ul>
+<li><a href="#historical_background">Message Oriented Communication</a></li>
+<li><a href="#message_passing_interface">Message-Passing Interface (MPI)</a></li>
+<li><a href="#erlang">Message Passing in Erlang</a></li>
+</ul>
+</nav>
+<p>Abstract...</p>
+<h1 id="historical_background">Message Oriented Communication</h1>
+<p>There are several mechanisms of communication in distributed systems, such as remote procedure calls and remote object invocations. Both mechanisms rely on direct processing after the request. This leads to problems if the component A relies on component B to process the request, but component B is not able to process in time <span class="citation" data-cites="tanenbaum">Tanenbaum and Steen (2007)</span>.<br /></p>
+<p>One of the most common abstract architecture is the Message-Oriented Transient Communication . TCP for example does provide all the neeeded socket primitives to build a sytem for developers, needing message based communication <span class="citation" data-cites="tanenbaum">Tanenbaum and Steen (2007)</span>.</p>
+<h1 id="message_passing_interface">Message-Passing Interface (MPI)</h1>
+<p>The Massage-Passing Interface (MPI) is another Message Passing standard, made for high performance and scale able distributed systems where high-efficiency is needed. The MPI standard was designed by the MPI Forum which is an open group with representatives from many organizations <span class="citation" data-cites="mpi">Message Passing Interface Forum (2012)</span>.<br /></p>
+<p>One goal of the MPI is to simplify the communication primitives and bring them to an abstraction level to perfectly fit the programmers needs of writing efficient and clean code for such distributed systems <span class="citation" data-cites="tanenbaum">Tanenbaum and Steen (2007)</span>.<br /></p>
+<p>TCP does not fit those requirements. While the socket primitives <em>read</em> and <em>write</em> are sufficient for several general-purpose protocols, (managing the communication across networks) they are insufficient for high-speed interconnection networks such as super computers or server clusters . With the possibility of implementing proprietary protocols, additional primitives can simplify and speed up the communication via messages <span class="citation" data-cites="tanenbaum">Tanenbaum and Steen (2007)</span>.</p>
+<h1 id="erlang">Message Passing in Erlang</h1>
+<p>Erlang is a functional programming language that was written for the need of real-time, non-stop, concurrent, very large and distributed system applications <span class="citation" data-cites="Armstrong96erlang">Armstrong (1996)</span>. While the language was originally designed by Joe Armstrong, Robert Virding and Mike Williams for Ericsson (a Swedish telecommunications provider) in 1986, it finally became open source in 1998, thanks to the open source initiatives lead by Linux <span class="citation" data-cites="erl_history">Däcker (2000)</span>.<br /></p>
+<p>Since there is a lot confusion with the naming of Erlang: Joe Armstrong, who started to design Erlang by adding functionality to Prolog, named it after the Danish mathematician Agner Krarup Erlang (creator of the Erlang loss formula) following the tradition of naming programming languages after dead mathematicians <span class="citation" data-cites="erl_history">Däcker (2000)</span>.<br /></p>
+<p>Erlang uses native Message Passing to communicate between light weight processes in distributed systems <span class="citation" data-cites="Armstrong96erlang">Armstrong (1996)</span>.</p>
+<p>This document was written with LaTeX.</p>
+<div class="references">
+<p>Armstrong, Joe. 1996. “Erlang - A Survey of the Language and Its Industrial Applications.” In <em>In Proceedings of the Symposium on Industrial Applications of Prolog (INAP96)</em>.</p>
+<p>Däcker, Bjarne. 2000. <em>Concurrent Functional Programming for Telecommunications: A Case Study of Technology Introduction</em>.</p>
+<p>Message Passing Interface Forum. 2012. <em>MPI: A Message-Passing Interface Standard Version 3.0</em>. University of Tennessee, Knoxville, Tennessee.</p>
+<p>Tanenbaum, Andrew S., and Maarten Van Steen. 2007. <em>Distributed Systems: Principles and Paradigms (Second Edition)</em>. Pearson Prentice Hall.</p>
+</div>
+</body>
+</html>
