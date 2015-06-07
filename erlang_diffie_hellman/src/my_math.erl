@@ -16,14 +16,14 @@
 
 %%% @doc  Returns the value of Base to the power of Exponent.
 %%%       If Base and Exponent is 0 the function returns 
-%%%       undefinedArithmeticExpression.
+%%%       {error, undefined_arithmetic_expression},
 %%%       The motivation to implement this function was that 
 %%%       there is no erlang standard library pow function 
 %%%       returning an integer.
 %%% @end
--spec pow(integer(), integer()) -> number().
+-spec pow(integer(), integer()) -> number() | {error, atom()}.
 pow(0, 0) ->
-  undefinedArithmeticExpression;
+  {error, undefined_arithmetic_expression};
 
 pow(Base, 0) ->
   case Base < 0 of
@@ -46,9 +46,6 @@ pow(Base, Exponent) ->
 %%%       returning an integer.
 %%% @end
 -spec pow(pos_integer(), non_neg_integer(), non_neg_integer()) -> integer().
-pow(0, 0, _) ->
-  undefinedArithmeticExpression;
-
 pow(_, 0, Acc) -> Acc;
 
 pow(Base, Exponent, 0) ->
