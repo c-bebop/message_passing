@@ -14,13 +14,14 @@
 -compile(export_all).
 
 %%% @doc  Public data represents the data which is publicly shared 
-%%%       within two communication partners when exchanging key by 
-%%%       the Diffie-Hellman key exchange algorithm.
+%%%       within two communication partners when exchanging keys
+%%%       with the Diffie-Hellman key exchange algorithm.
 %%%       p: The public prime number
 %%%       g: The public prime number (1 ... p - 1)
 %%%       componentKey: The computed component key
 %%%       pid: The pid of the one who instantiated this record
--record(publicData, {p, g, componentKey, pid}).
+%%%       name: The name of whom creates this public data.
+-record(publicData, {p, g, componentKey, pid, name}).
 
 %%% @doc  Returns the value G to the power of MySecretKey Modulo P 
 %%%       which is the public component key for the Diffie-Hellman 
@@ -32,9 +33,9 @@ computeMyPublicComponentKey(P, G, MySecretKey) ->
   my_math:pow(G, MySecretKey) rem P.
 
 %%% @doc  Returns the value ComponentKey to the power of 
-%%%       MySecretKey 
-%%%       Modulo P which is the private shared key for the 
-%%%       Diffie-Hellman key exchange algorithm.
+%%%       MySecretKey Modulo P which is the private
+%%%       shared key for the Diffie-Hellman key exchange
+%%%       algorithm.
 %%%       For more information see http://goo.gl/pzdiH.
 %%% @end
 -spec computeSharedPrivateKey(pos_integer(), pos_integer(), pos_integer()) -> pos_integer().
@@ -45,8 +46,9 @@ computeSharedPrivateKey(P, ComponentKey, MySecretKey) ->
 %%%       taking P (a prime number), G (1 ... P - 1), MySecretKey
 %%%       is the secret integer of the one who executes this 
 %%%       function and the PartnerPID which is the PID of the 
-%%%       communication partner with you a key exchange shall be 
-%%%       initiated. This function sends the term 
+%%%       communication partner with whom a key exchange shall be
+%%%       initiated.  MyName shall be the name of the executing
+%%%       partner. This function sends the term
 %%%       {startKeyExchange, PublicData} to the PartnerPID where 
 %%%       PublicData is of type publicData. Afterwards, the 
 %%%       function starts a receive construct which is receiving 
@@ -61,28 +63,30 @@ computeSharedPrivateKey(P, ComponentKey, MySecretKey) ->
 %%%       After 3000 milliseconds:    
 %%%           The function will return timeout.
 %%% @end
--spec startKeyExchange(pos_integer(), pos_integer(), pos_integer(), term()) -> term().
-startKeyExchange(P, G, MySecretKey, PartnerPID) ->
+-spec startKeyExchange(pos_integer(), pos_integer(), pos_integer(), term(), string()) -> term() | {error, atom()}.
+startKeyExchange(P, G, MySecretKey, PartnerPID, MyName) ->
   MyComponentKey = computeMyPublicComponentKey(P, G, MySecretKey),
-  MyPublicData = #publicData{p = P, g = G, componentKey = MyComponentKey, pid = self()},
+  MyPublicData = #publicData{p = P, g = G, componentKey = MyComponentKey, pid = self(), name = MyName},
   PartnerPID ! {startKeyExchange, MyPublicData},
 
   receive
 
-    {componentKey, #publicData{p = P, g = G, componentKey = PartnerComponentKey, pid = PartnerPID}} ->
+    {componentKey, #publicData{p = P, g = G, componentKey = PartnerComponentKey, pid = PartnerPID, name = PartnerName}} ->
       PrivateSharedKey = computeSharedPrivateKey(P, PartnerComponentKey, MySecretKey),
-      printSharedPrivateKey(self(), PrivateSharedKey);
+      printSharedPrivateKey(self(), MyName, PartnerName, PrivateSharedKey);
 
     UnexpectedMessage ->
       printUnexpectedMessage(UnexpectedMessage),
-      startKeyExchange(P, G, MySecretKey, PartnerPID)
+      startKeyExchange(P, G, MySecretKey, PartnerPID, MyName)
 
   after 3000 ->
-    timeout
+    {error, timeout_after_3000_ms}
 
   end.
 
-%%% @doc  Listens on Messages to start the Diffie-Hellman key 
+%%% @doc  Listens on Messages to start the Diffie-Hellman key
+%%%       with the transferred MySecretKey and MyName
+%%%       which shall be the name of the executing partner.
 %%%       exchange by starting the following receive construct:
 %%%       {startKeyExchange, PublicData}: 
 %%%           The message including all information needed to 
@@ -98,17 +102,17 @@ startKeyExchange(P, G, MySecretKey, PartnerPID) ->
 %%%           Prints out any unexpected incomping message and 
 %%%           calls a recursion.
 %%% @end
--spec listenKeyExchange(pos_integer()) -> term().
-listenKeyExchange(MySecretKey) ->
+-spec listenKeyExchange(pos_integer(), string()) -> term().
+listenKeyExchange(MySecretKey, MyName) ->
   receive
 
-    {startKeyExchange, #publicData{p = P, g = G, componentKey = PartnerComponentKey, pid = PartnerPID}} ->
+    {startKeyExchange, #publicData{p = P, g = G, componentKey = PartnerComponentKey, pid = PartnerPID, name = PartnerName}} ->
       MyComponentKey    = computeMyPublicComponentKey(P, G, MySecretKey),
-      MyPublicData      = #publicData{p = P, g = G, componentKey = MyComponentKey, pid = self()},
+      MyPublicData      = #publicData{p = P, g = G, componentKey = MyComponentKey, pid = self(), name = MyName},
       PartnerPID ! {componentKey, MyPublicData},
       PrivateSharedKey  = computeSharedPrivateKey(P, PartnerComponentKey, MySecretKey),
-      printSharedPrivateKey(self(), PrivateSharedKey),
-      listenKeyExchange(MySecretKey);
+      printSharedPrivateKey(self(), MyName, PartnerName, PrivateSharedKey),
+      listenKeyExchange(MySecretKey, MyName);
 
     terminate ->
       io:format("~p terminates!~n", [self()]),
@@ -116,32 +120,36 @@ listenKeyExchange(MySecretKey) ->
 
     UnexpectedMessage ->
       printUnexpectedMessage(UnexpectedMessage),
-      listenKeyExchange(MySecretKey)
+      listenKeyExchange(MySecretKey, MyName)
 
   end.
 
 %%% @doc  Prints out the UnexpectedMessage as follows:
 %%%       Received an unexpected message: 'Unexpected Message'
 %%% @end
+-spec printUnexpectedMessage(string()) -> term().
 printUnexpectedMessage(UnexpectedMessage) ->
   io:format("Received an unexpected message: ~p~n", [UnexpectedMessage]).
 
 %%% @doc  Prints out the shared private key as follows:
-%%%       'PID': The shared private Key is: 'SharedKey'
+%%%       'MyName' ('PID'): The shared private Key,
+%%%       exchanged with 'PartnerName' is: 'SharedKey'
 %%% @end
-printSharedPrivateKey(PID, SharedKey) ->
-  io:format("~p: The shared private Key is: ~p~n", [PID, SharedKey]).
+-spec printSharedPrivateKey(term(), string(), string(), string()) -> term().
+printSharedPrivateKey(PID, MyName, ParnterName, SharedKey) ->
+  io:format("~p (~p): The shared private Key, exchanged with ~p is: ~p~n", [MyName, PID, ParnterName, SharedKey]).
 
 %%% @doc  Starts a key exchange example by spawning the Alice 
 %%%       process, which executes the listenKeyExchange function 
 %%%       with MySecretKey = 15, and the Bob process, which 
 %%%       exectues the startKeyExchange function with P = 23, 
 %%%       G = 5, MySecretKey = 6 and PartnerPID = Alice. Returns
-%%%       Alice and Bob.
+%%%       {Alice, Bob} (pids).
 %%%
+-spec startExample() -> term().
 startExample() ->
-  Alice   = spawn(diffie_hellman, listenKeyExchange, [15]),
-  Bob = spawn(diffie_hellman, startKeyExchange, [23, 5, 6, Alice]),
+  Alice   = spawn(diffie_hellman, listenKeyExchange, [15, "Alice"]),
+  Bob     = spawn(diffie_hellman, startKeyExchange, [23, 5, 6, Alice, "Bob"]),
   {Alice, Bob}.
 
 %%% @doc  Starts a key exchange remote example by spawning the 
@@ -152,7 +160,8 @@ startExample() ->
 %%%       MySecretKey = 6 and PartnerPID = Alice.
 %%%       Returns Alice and Bob.
 %%% @end
+-spec startRemoteExample(atom()) -> term().
 startRemoteExample(RemoteNode) ->
-  Alice   = spawn(RemoteNode, diffie_hellman, listenKeyExchange, [15]),
-  Bob = spawn(diffie_hellman, startKeyExchange, [23, 5, 6, Alice]),
+  Alice   = spawn(RemoteNode, diffie_hellman, listenKeyExchange, [15, "Alice"]),
+  Bob     = spawn(diffie_hellman, startKeyExchange, [23, 5, 6, Alice, "Bob"]),
   {Alice, Bob}.
