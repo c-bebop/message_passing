@@ -1,9 +1,13 @@
 ## Erlang files:
 *.beam
 
+### Erlang crash file
+*.dump
+
 ## IDE files:
 .idea
 .idea/*
+*.iml
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
