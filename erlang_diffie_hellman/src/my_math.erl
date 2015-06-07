@@ -1,6 +1,9 @@
 %%% @author     Florian Willich
-%%% @copyright  The MIT License (MIT) for more information see
-%%%             http://opensource.org/licenses/MIT
+%%% @copyright  The MIT License (MIT) Copyright (c) 2014 
+%%%             University of Applied Sciences, Berlin, Germany
+%%%             Florian Willich
+%%%             For more detailed information, please read the 
+%%%             licence.txt in the erlang root directory.
 %%% @doc        This is my math module for mathematical functions not provided
 %%%             by the erlang standard library.
 %%% @end
