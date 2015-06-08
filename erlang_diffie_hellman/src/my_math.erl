@@ -38,9 +38,7 @@ pow(Base, Exponent) ->
   end.
 
 %%% @doc  Returns the value of Base to the power of Exponent. 
-%%%       Acc should be 0 for initiating computation. If Base
-%%%       and Exponent is 0 the function returns 
-%%%       undefinedArithmeticExpression. 
+%%%       Acc should be 0 for initiating computation.
 %%%       The motivation to implement this function was that 
 %%%       there is no erlang standard library pow function 
 %%%       returning an integer.
