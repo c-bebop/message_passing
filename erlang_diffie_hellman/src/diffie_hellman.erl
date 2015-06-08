@@ -5,13 +5,21 @@
 %%%             For more detailed information, please read the 
 %%%             licence.txt in the erlang root directory.
 %%% @doc        This module represents a simple implementation of
-%%%             the Diffie-Hellman key exchange algorithm.
+%%%             the Diffie-Hellman key exchange algorithm and is
+%%%             part of my technical report 'Introductory Guide
+%%%             to Message Passing in Distributed Systems'.
 %%% @end
 %%% Created 2015-06-06
 
 -module(diffie_hellman).
 -author("Florian Willich").
--compile(export_all).
+-export([ computeMyPublicComponentKey/3, 
+          computeSharedPrivateKey/3, 
+          startKeyExchange/5, 
+          listenKeyExchange/2, 
+          startExample/0, 
+          startRemoteExample/1,
+          startRemoteExample/5]).
 
 %%% @doc  Public data represents the data which is publicly shared 
 %%%       within two communication partners when exchanging keys
@@ -157,11 +165,25 @@ startExample() ->
 %%%       function with MySecretKey = 15, and the Bob process,
 %%%       located on the RemoteNode, which exectues the 
 %%%       startKeyExchange function with P = 23, G = 5, 
-%%%       MySecretKey = 6 and PartnerPID = Alice.
-%%%       Returns Alice and Bob.
+%%%       MySecretKey = 6 and Alice PID.
+%%%       Returns the pids of Alice and Bob.
 %%% @end
 -spec startRemoteExample(atom()) -> term().
 startRemoteExample(RemoteNode) ->
   Alice   = spawn(RemoteNode, diffie_hellman, listenKeyExchange, [15, "Alice"]),
   Bob     = spawn(diffie_hellman, startKeyExchange, [23, 5, 6, Alice, "Bob"]),
+  {Alice, Bob}.
+
+%%% @doc  Starts a key exchange remote example by spawning the 
+%%%       Alice process, which executes the listenKeyExchange 
+%%%       function with AliceSecretKey, and the Bob process,
+%%%       located on the RemoteNode, which exectues the 
+%%%       startKeyExchange function with P, G, 
+%%%       BobSecretKey and Alice PID.
+%%%       Returns the pids of Alice and Bob.
+%%% @end
+-spec startRemoteExample(atom(), pos_integer(), pos_integer(), pos_integer(), pos_integer()) -> term().
+startRemoteExample(RemoteNode, P, G, BobSecretKey, AliceSecretKey) ->
+  Alice   = spawn(RemoteNode, diffie_hellman, listenKeyExchange, [AliceSecretKey, "Alice"]),
+  Bob     = spawn(diffie_hellman, startKeyExchange, [P, G, BobSecretKey, Alice, "Bob"]),
   {Alice, Bob}.
