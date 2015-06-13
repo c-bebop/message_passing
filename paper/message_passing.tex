@@ -126,7 +126,7 @@ Communication in distributed systems defines a distributed system itself: N syst
 
 \noindent The requirements of \textbf{Intelligibility} and \textbf{Executability} do not come under the area of responsibility of \gls{tcp} and thus other standards have to take place, such as \gls{xml} or \gls{json} to structure the messages in a standardized manner, and the message parsing implementation to call the desired instructions.\\
 
-\noindent There are other primitives than the above mentioned to provide the functionality of \gls{tcp} \cite[ch. 4.3.1 on p. 141]{tanenbaum}. The referenced book \cite{tanenbaum} provides useful and valuable information on this topic.\\
+\noindent There are other socket primitives than the above mentioned to provide the functionality of \gls{tcp} \cite[ch. 4.3.1 on p. 141]{tanenbaum}. The referenced book \cite{tanenbaum} provides useful and valuable information on this topic.\\
 
 \noindent It is also important to understand that this was just a round-up of how one can make basic use of the socket primitives to implement message passing in an application. There is plenty to discuss about how message passing is realized, such as the \gls{osi} which was developed by the \gls{iso} to model the different layers of network oriented communication \cite[ch. 4.1.1 on p. 116]{tanenbaum}. Furthermore, the \gls{os} has to reserve local memory to provide a buffer for the in- and outgoing messages.
 
@@ -134,11 +134,17 @@ Communication in distributed systems defines a distributed system itself: N syst
 
 \noindent After discussing a protocol to handle the socket primitives, it is necessary to consider one major difference in message passing models, which is whether to use asynchronous or synchronous message passing. Passing a message synchronously means that the called message send routine returns after the request has been successfully transmitted (or an error occurred). Receiving a message synchronously means that the called message receiving routine reads a specific amount of bytes from the socket and returns that message.\\
 
-\noindent To pass or receive a message asynchronously, another application layer i.e. middleware has to take place. The call of a send routine can either return when the middleware took over the transmission of the request, or when it successfully sent the request to the receiver, or when it successfully sent the request to the receiver, assuring this by a corresponding message \cite[ch. 4.1 on p. 125]{tanenbaum}.
+\noindent To pass or receive a message asynchronously, another application layer i.e. middleware has to take place. The call of a send routine can either return when the middleware took over the transmission of the request, or when it successfully sent the request to the receiver, or when it successfully sent the request to the receiver, assuring this by a corresponding message \cite[ch. 4.1 on p. 125]{tanenbaum}.\\
 
-\noindent The middleware can also perform some preparatory work e.g. separating stand-alone request strings and parsing them into a data structure and returning this data – which is more easily to parse – when calling the receive routine of the message passing middleware.\\
+\noindent The middleware can also perform some preparatory work e.g. separating stand-alone request bit strings and parsing them into a data structure and returning it when calling the receive routine of the message passing middleware.\\
 
 \noindent One key model to provide such middleware functionalities are message queues. A message queue is a queue to store messages by the \gls{fifo} principle. This enables the application to asynchronously send and receive messages by offering an incoming message queue and an outgoing message queue. This makes all the send and receive mechanisms fully transparent to the application \cite[ch. 4.3.2 on p. 145 - 147]{tanenbaum}.
+
+\section{\scshape{\textcolor{blue}{Definition of Message Passing in Distributed Systems}}}
+
+\begin{quote}
+\textit{Message passing in distributed systems is a model to exchange messages within a process pair by making use of several standards and implementation details. The specifically used message passing model can diverge extremely in its provided functionality and defines how to provide the connection and send or receive messages whereas the physical conditions and the implementation of executing the desired instructions is undefined.}
+\end{quote}
 
 \section{\scshape{\textcolor{blue}{Message-Passing Interface Standard}}} \label{message_passing_interface}
 
@@ -180,66 +186,77 @@ Function that returns the \gls{pid} of the actor executing the function.
 
 \subsection{Implementation of a Simple Diffie-Hellman Key Exchange in Erlang} \label{erlang_implementation}
 
-The following implementation of a Diffie-Hellman key exchange algorithm in Erlang is simple and short. Please be aware that this Erlang application is not in any way acceptable as a practical tool to exchange keys with the Diffie-Hellman algorithm! For me, this is only a nice example to show how the Erlang message passing model works in practice. You can find the code on Github:
+The following implementation of a Diffie-Hellman key exchange algorithm in Erlang is simplified. Please note that this Erlang application is not in any way acceptable as an adequate implementation of the Diffie-Hellman key exchange algorithm for use in the field! The code demonstrates the simplicity of implementing concurrent applications in Erlang by using message passing. You can find the code on Github:
 
 \begin{center}
 \url{https://github.com/c-bebop/message_passing}
 \end{center}
 
-and is licensed under the MIT License. You're welcome to contribute!
+\noindent and is licensed under the MIT License. You're welcome to contribute!
 
 \lstinputlisting{../erlang_diffie_hellman/src/diffie_hellman.erl}
 
 \subsection{Running the Simple Diffie-Hellman Key Exchange in Erlang}
 
-To run the listed implementation of a simple Diffie-Hellman key exchange in Erlang (\ref{erlang_implementation}) in a Linux shell we shall do the following (assuming that Erlang is already installed on our machine, help can be found here \url{http://www.erlang.org/doc/installation_guide/INSTALL.html}):\\
+To run the applicatoin (\ref{erlang_implementation}) in a Linux shell one shall do the following (assuming that Erlang is already installed, help can be found at \url{http://www.erlang.org/doc/installation_guide/INSTALL.html}).
 
-\noindent We open a Linux shell and type:
+\subsubsection{Preparatory Work}
 
-\begin{lstlisting}[language=bash, numbers=none]
+\noindent Open a Linux shell, go to the \textit{source} directory of the Erlang code and type:
+
+\begin{lstlisting}[language=bash]
 $ erl -sname bob
 \end{lstlisting}
 
-\noindent Which will output (of course the output depends on the executing system e.g. how many physical cores we have etc.):
+\noindent Which will output (meta data depends of the executing system):
 
-\begin{lstlisting}[language=bash, numbers=none]
+\begin{lstlisting}[language=bash]
 Erlang/OTP 17 [erts-6.3] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
 
 Eshell V6.3  (abort with ^G)
 (bob@localhost)1> 
 \end{lstlisting}
 
-\noindent The option \textit{-sname bob} tells the Erlang shell to run on a node called \textit{bob}. First we compile the two modules and afterwards we run the \textit{startExample} function:
+\noindent The option \textit{-sname bob} tells the Erlang shell to run on a node called \textit{bob}. First one shall compile the two modules and afterwards:
 
-\begin{lstlisting}[language=bash, numbers=none]
+\begin{lstlisting}[language=bash]
 (bob@localhost)1> c(diffie_hellman).
 {ok,diffie_hellman}
 (bob@localhost)2> c(my_math).
 {ok,my_math}
+\end{lstlisting}
+
+\subsubsection{Running the Application on One Node}
+
+Now execute the \textit{startExample} function as follows:
+
+\begin{lstlisting}[language=bash]
 (bob@localhost)3> diffie_hellman:startExample().
 "Alice" (<0.50.0>): The shared private Key, exchanged with "Bob" is: 2
 "Bob" (<0.51.0>): The shared private Key, exchanged with "Alice" is: 2
 {<0.50.0>,<0.51.0>}
 \end{lstlisting}
 
-\noindent Executing the function \textit{startExample} spawns a process that executes the \textit{listenKeyExchange} function with \textit{15} as the \textit{private key} and \textit{"Alice"} as the name and binds the returning \gls{pid} to the value called Alice. Afterwards, \textit{startExample} spawns another process that executes the \textit{startKeyExchange} function with \textit{23} for \textit{P}, \textit{5} for \textit{G}, \textit{6} for the \textit{private key}, the \gls{pid} of Alice and \textit{"Bob"} as the name which binds the returning \gls{pid} to the value called Bob. At the end the function returns those two values Alice and Bob. As we can see from the output, Alice has the \gls{pid} <0.50.0> and the calculated private key, exchanged with Bob is 2. Bob has the \gls{pid} <0.51.0> and has computed the same private key. This means that the messages between the actors have been successfully transmitted and also the key exchange worked (the shared private key computed by the two communication partners is 2).\\
+\noindent Executing the function \textit{startExample} spawns a process that executes the \textit{listenKeyExchange} function with \textit{15} as the \textit{private key} and \textit{"Alice"} as the name and binds the returning \gls{pid} to the value called Alice. Afterwards, \textit{startExample} spawns another process that executes the \textit{startKeyExchange} function with \textit{23} for \textit{P}, \textit{5} for \textit{G}, \textit{6} for the \textit{private key}, the \gls{pid} of Alice and \textit{"Bob"} as the name which binds the returning \gls{pid} to the value called Bob. At the end the function returns the two pids of \textit{Alice} and \textit{Bob}. As we can see from the output, Alice has the \gls{pid} <0.50.0> and the calculated private key, exchanged with Bob is 2. Bob has the \gls{pid} <0.51.0> and has computed the same private key.
 
-\noindent Now we run the key exchange algorithm on two nodes. To do so, we need to open another shell and type:
+\subsubsection{Running the Application on Two Nodes}
+
+\noindent Now run the key exchange algorithm on two nodes. Open another shell, go to the \textit{source} directory of the Erlang code and type:
 
 \begin{lstlisting}[language=bash, numbers=none]
 $ erl -sname alice
 \end{lstlisting}
 
-\noindent Which will output:
+\noindent Which will output (meta data depends of the executing system):
 
-\begin{lstlisting}[language=bash, numbers=none]
+\begin{lstlisting}[language=bash]
 Erlang/OTP 17 [erts-6.3] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
 
 Eshell V6.3  (abort with ^G)
 (alice@localhost)1>
 \end{lstlisting}
 
-\noindent This means we're now running another Erlang shell on the node alice (we should compile both files in the new Erlang shell, too). Now in the shell of the node bob we execute the function \textit{startRemoteExample} with the atom \textit{alice@localhost} as parameter to specify on which node the actor shall be spawned that executes the \textit{listenKeyExchange} function:
+\noindent This means we're now running another Erlang shell on the node alice (compile both files in the new Erlang shell, too). Now in the Erlang shell running the node \textit{bob} execute the function \textit{startRemoteExample} with the atom \textit{alice@localhost} as the transferred parameter to specify on which node the actor shall be spawned that executes the \textit{listenKeyExchange} function:
 
 \begin{lstlisting}[language=bash, numbers=none]
 (bob@localhost)4> diffie_hellman:startRemoteExample(alice@localhost).
@@ -253,13 +270,7 @@ Eshell V6.3  (abort with ^G)
 "Bob" (<0.58.0>): The shared private Key, exchanged with "Alice" is: 2
 \end{lstlisting}
 
-\noindent All transferred parameters are the same with the difference that the \textit{Alice} actor is now located on the node \textit{alice}. The output is still printed out in the \textit{bob} node, since Erlang recognizes where the ... ????\\
-
-\section{\scshape{\textcolor{blue}{Definition of Message Passing in Distributed Systems}}}
-
-\begin{quote}
-\textit{Message passing in distributed systems is a model to exchange messages within a process pair by making use of several standards and implementation details. The specifically used message passing model can diverge extremely in its provided functionality and defines how to provide the connection and send or receive messages whereas the physical conditions and the implementation of executing the desired instructions is undefined.}
-\end{quote}
+\noindent All transferred parameters are the same with the difference that the \textit{Alice} actor is now located on the node \textit{alice}. The output is still printed out in the \textit{bob} node, since the Erlang io system recognizes where the process is spawned from and sends all the output there \cite[ch. 4.3.4 on p. 104]{erl_doc}.\\
 
 \newpage
 
