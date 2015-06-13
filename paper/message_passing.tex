@@ -12,7 +12,7 @@
 
 \usepackage[dvipsnames]{xcolor}
 \definecolor{blue}{cmyk}{0.81,0.26,0,0.48}
-\definecolor{code_backgrond}{cmyk}{0.05,0.03,0,0.1}
+\definecolor{code_backgrond}{cmyk}{0.02,0.01,0,0.07}
 \definecolor{red}{cmyk}{0,0.76,0.76,0.48}
 \definecolor{lbcolor}{rgb}{1,1,1}
 \definecolor{mygray}{rgb}{0.3,0.3,0.3}
@@ -145,21 +145,29 @@ Communication in distributed systems defines a distributed system itself: N syst
 
 \noindent One key model to provide such middleware functionalities are message queues. A message queue is a queue to store messages by the \gls{fifo} principle. This enables the application to asynchronously send and receive messages by offering an incoming message queue and an outgoing message queue. This makes all the send and receive mechanisms fully transparent to the application \cite[ch. 4.3.2 on p. 145 - 147]{tanenbaum}.
 
-\section{\scshape{\textcolor{blue}{Definition of Message Passing in Distributed Systems}}}
-
-\begin{quote}
-\textit{Message passing in distributed systems is a model to exchange messages within a process pair by making use of several standards and implementation details. The specifically used message passing model can diverge extremely in its provided functionality and defines how to provide the connection and send or receive messages whereas the physical conditions and the implementation of executing the desired instructions is undefined.}
-\end{quote}
-
 \section{\scshape{\textcolor{blue}{Message-Passing Interface Standard}}} \label{message_passing_interface}
 
 To pass messages between processes is adding large overhead to the communication model. Nevertheless, providing a well defined interface to control exactly how messages are passed regains the ability to write \gls{hpc} applications.\\
 
-\noindent The \gls{mpi} is a message-passing library interface specification, created for high performance and scalable distributed systems where high-efficiency is needed.  The \gls{mpi} standard was designed by the \gls{mpif} which is an open group with representatives from many organizations. The current version of the \gls{mpi} standard is MPI-3.0 \cite[ch. Abstract/ii \& Acknowledgements/xx \& 1.1 on p. 1]{mpi}.\\
+\noindent The \gls{mpi} is a message-passing library interface specification, created for high performance and scalable distributed systems where high-efficiency is needed.  The \gls{mpi} standard was designed by the \sloppy \gls{mpif} which is an open group with representatives from many organizations. The current version of the \gls{mpi} standard is MPI-3.0 \cite[ch. Abstract/ii \& ch. Acknowledgements/xx \& ch. 1.1 on p. 1]{mpi}.\\
 
 \noindent The \gls{mpif} aims to offer a standard which establishes a practical, portable, efficient and flexible way of implementing message-passing in various high-level programming languages (e.g. C, C++, Fortran) \cite[ch. History/iii]{mpi}. Furthermore, the \gls{mpi} simplifies the communication primitives and brings them to an abstraction level to perfectly fit the programmer's needs of writing efficient and clean code for such \gls{hpc} distributed systems \cite[ch. 4.3.1 on p 143]{tanenbaum}.\\
 
 \noindent \gls{tcp} does not fit those requirements. While the socket primitives \textit{read} and \textit{write} are sufficient for several general-purpose protocols (managing the communication across networks), they are insufficient for high-speed interconnection networks such as super computers or server clusters. The \gls{mpi} standard offers a set of functions and datatypes with which the software developer is able to explicitly execute synchronous and asynchronous message passing routines \cite[ch. 4.3 on p. 143]{tanenbaum}.
+
+\section{\scshape{\textcolor{blue}{Definition}}}
+
+The given task of Prof. Dr. Christin Schmidt was to define the term \textit{Message Passing}. After discussing the theoretical basis and practical implementations, message passing is a term in distributed systems to characterize a communication model that deals with messages: 
+
+\begin{quote}
+\textit{Message passing in distributed systems is a model to exchange messages within a process pair by making use of several standards and implementation details. The specifically used message passing model can diverge extremely in its provided functionality and defines how to provide the connection and send or receive messages.}
+\end{quote}
+
+\noindent However, no message passing model defines the medium that transports the messages nor the outcome of a message and thus the following delimitation has to be made:
+
+\begin{quote}
+\textit{The physical conditions and the implementation of executing the desired instructions is not defined by the used message passing model.}
+\end{quote}
 
 \section{\scshape{\textcolor{blue}{Message Passing in Erlang}}} \label{erlang}
 
@@ -167,7 +175,7 @@ To pass messages between processes is adding large overhead to the communication
 
 Erlang is a functional, declarative programming language that was written for the need of real-time, non-stop, concurrent, very large and distributed system applications \cite[chap. 1 / p. 1]{Armstrong96erlang}. While the language was originally designed by Joe Armstrong, Robert Virding and Mike Williams for Ericsson (a Swedish telecommunications provider) in 1986, it finally became open source in 1998, thanks to the open source initiatives lead by Linux \cite[chap. 8 on p. 39]{erl_history}.\\
 
-\noindent Joe Armstrong, who started to design Erlang by adding functionality to Prolog, named it after the Danish mathematician Agner Krarup Erlang (creator of the Erlang loss formula) following the tradition of naming programming languages after dead mathematicians \cite[chap. 4.1 on p. 13]{erl_history}.\\
+\noindent Joe Armstrong, who started to design Erlang by adding functionality to Prolog, named the new programming language after the Danish mathematician \sloppy Agner \sloppy Krarup  Erlang (creator of the Erlang loss formula) following the tradition of naming programming languages after dead mathematicians \cite[chap. 4.1 on p. 13]{erl_history}.\\
 
 \noindent Erlang uses a native, asynchronous message passing model to communicate between light weight processes, also called actors \cite[chap. 1 on p. 1]{Armstrong96erlang}. Erlang does not make heavy use of the executing \gls{os} to provide the described concurrency model, which implicitly means that Erlang decouples the underlying \gls{os} and thus providing a cross-platform and transparent message passing model \cite[chap. 1  \& 3 on p. 1 - 3]{Armstrong96erlang}.
 
@@ -189,11 +197,11 @@ Function returning the \gls{pid} of the actor executing the function.
 
 \end{itemize}
 
-\noindent Although the semantics and functions described above require foreknowledge on the Erlang programming language, it was important for me to show that Erlang is not only offering an easily intelligible interface for concurrency, it rather is a concurrent functional programming language. I recommend to take a look at the referenced official Erlang documentation or to \textit{learn you some Erlang} on \url{www.learnyousomeerlang.com}.
+\noindent Although the semantics and functions described above may require some foreknowledge on the Erlang programming language, it was important for me to show that Erlang is not only offering an easily intelligible interface for concurrency, it rather is a concurrent functional programming language. Nevertheless, there is plenty to discuss about the concurrency model of Erlang e.g. how to manage processes or handle errors. I recommend to take a look at the referenced official Erlang documentation or to \textit{learn you some Erlang} on \url{www.learnyousomeerlang.com}.
 
-\subsection{Implementation of a Simple Diffie-Hellman Key Exchange in Erlang} \label{erlang_implementation}
+\subsection{Implementation of a Simple Diffie-Hellman Key Exchange Algorithm} \label{erlang_implementation}
 
-The following implementation of a Diffie-Hellman key exchange algorithm in Erlang is simplified. Please note that this Erlang application is not in any way acceptable as an adequate implementation of the Diffie-Hellman key exchange algorithm for use in the field! The code demonstrates the simplicity of implementing concurrent applications in Erlang by using message passing. The sourcecode is hosted by Github:
+The following implementation of a Diffie-Hellman key exchange algorithm in Erlang is simplified. Please note that this Erlang application is not in any way acceptable as an adequate implementation of the Diffie-Hellman key exchange algorithm for use in the field! The code demonstrates the simplicity of implementing concurrent applications in Erlang by using message passing. Due to the need for a pow function returning the datatype \textit{Integer} I implemented my own pow function see Appendix \ref{my_math}. The sourcecode is hosted by Github:
 
 \begin{center}
 \url{https://github.com/c-bebop/message_passing}
@@ -203,7 +211,7 @@ The following implementation of a Diffie-Hellman key exchange algorithm in Erlan
 
 \lstinputlisting{../erlang_diffie_hellman/src/diffie_hellman.erl}
 
-\subsection{Running the Simple Diffie-Hellman Key Exchange in Erlang}
+\subsection{Running the Application}
 
 To run the applicatoin (\ref{erlang_implementation}) in a Linux shell one shall do the following (assuming that Erlang is already installed, help can be found at \url{http://www.erlang.org/doc/installation_guide/INSTALL.html}).
 
@@ -265,19 +273,19 @@ Eshell V6.3  (abort with ^G)
 
 \noindent This means we're now running another Erlang shell on the node alice (compile both files in the new Erlang shell, too). Now in the Erlang shell running the node \textit{bob} execute the function \textit{startRemoteExample} with the atom \textit{alice@localhost} as the transferred parameter to specify on which node the actor shall be spawned that executes the \textit{listenKeyExchange} function:
 
-\begin{lstlisting}[language=bash, numbers=none]
+\begin{lstlisting}[language=bash]
 (bob@localhost)4> diffie_hellman:startRemoteExample(alice@localhost).
 \end{lstlisting}
 
 \noindent This will output the following:
 
-\begin{lstlisting}[language=bash, numbers=none]
+\begin{lstlisting}[language=bash]
 {<9879.54.0>,<0.58.0>}
 "Alice" (<9879.54.0>): The shared private Key, exchanged with "Bob" is: 2
 "Bob" (<0.58.0>): The shared private Key, exchanged with "Alice" is: 2
 \end{lstlisting}
 
-\noindent All transferred parameters are the same with the difference that the \textit{Alice} actor is now located on the node \textit{alice}. The output is still printed out in the \textit{bob} node, since the Erlang io system recognizes where the process is spawned from and sends all the output there \cite[ch. 4.3.4 on p. 104]{erl_doc}.\\
+\noindent All transferred parameters are the same with the difference that the \textit{Alice} actor is now located on the node \textit{alice}. The output is still printed out in the \textit{bob} node, since the Erlang io system recognizes where the process is spawned from and sends all the output to it \cite[ch. 4.3.4 on p. 104]{erl_doc}.\\
 
 \newpage
 
@@ -287,11 +295,9 @@ Eshell V6.3  (abort with ^G)
 
 \lstinputlisting{../erlang_diffie_hellman/src/my_math.erl}
 
-\section{Acronyms}
+\end{appendix}
 
 \printnoidxglossaries
-
-\end{appendix}
 
 \newpage
 
