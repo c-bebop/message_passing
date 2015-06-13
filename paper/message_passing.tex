@@ -95,7 +95,7 @@ Message passing in distributed systems is a model to exchange messages within a 
 
 \subsection{\scshape{Introduction}}
 
-Communication in distributed systems defines a distributed system itself: N systems execute one or more tasks by computing and communicating with each other. Every time systems shall communicate with each other to provide services, a proficient communication model has to be implemented. There are several models of communication in distributed systems such as \gls{rpc} or object method invocation \cite[chap. 4.3 / p. 203]{tanenbaum}. With this paper I'll introduce you to the message passing model in distributed systems.\\
+To provide services and execute tasks, a distributed system has to have a proficient communication model implementation. There are several models of communication in distributed systems such as \gls{rpc} or object method invocation \cite[chap. 4.3 / p. 203]{tanenbaum}. With this paper I'm giving an  introduction to message passing in distributed systems.\\
 
 \noindent As human beings we already have a deep understanding of different models of message passing. While you read these words, I am passing a message to you, which seems to be a trivial thing to people who can read. In more philosophical terms, now that you are reading those words, a message is being passed from one entity (me, the writer) to another entity (you, the reader) which is obviously non trivial considering all the assumptions we would have to make to actually realize this message passing model between human beings.\\
 
@@ -157,10 +157,10 @@ To pass messages between processes is adding large overhead to the communication
 
 \section{\scshape{\textcolor{blue}{Definition}}}
 
-The given task of Prof. Dr. Christin Schmidt was to define the term \textit{Message Passing}. After discussing the theoretical basis and practical implementations, message passing is a term in distributed systems to characterize a communication model that deals with messages: 
+The given task of Prof. Dr. Christin Schmidt was to write a technical report defining the term \textit{Message Passing}. After discussing the theoretical basis and practical implementations, message passing in distributed systems appears to be a technical jargon term to characterize a communication model in distributed systems that deals with messages:
 
 \begin{quote}
-\textit{Message passing in distributed systems is a model to exchange messages within a process pair by making use of several standards and implementation details. The specifically used message passing model can diverge extremely in its provided functionality and defines how to provide the connection and send or receive messages.}
+\textit{Message passing in distributed systems is a model to exchange messages within a process pair by making use of several standards and implementation details. The specifically used message passing model can diverge extremely in its provided facilities and defines how to establish the connection, send and receive messages.}
 \end{quote}
 
 \noindent However, no message passing model defines the medium that transports the messages nor the outcome of a message and thus the following delimitation has to be made:
