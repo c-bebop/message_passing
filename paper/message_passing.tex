@@ -8,9 +8,14 @@
 \usepackage[default,scale=0.95]{opensans}
 \usepackage[T1]{fontenc}
 
+\usepackage{transparent}
+
 \usepackage[dvipsnames]{xcolor}
 \definecolor{blue}{cmyk}{0.81,0.26,0,0.48}
+\definecolor{code_backgrond}{cmyk}{0.05,0.03,0,0.1}
 \definecolor{red}{cmyk}{0,0.76,0.76,0.48}
+\definecolor{lbcolor}{rgb}{1,1,1}
+\definecolor{mygray}{rgb}{0.3,0.3,0.3}
 
 % GLOSSAR BEGIN
 \usepackage[acronym]{glossaries}
@@ -18,8 +23,7 @@
 % Listing for Code
 \usepackage{listings}
 
-\definecolor{lbcolor}{rgb}{1,1,1}
-\definecolor{mygray}{rgb}{0.3,0.3,0.3}
+
 \lstset{ %
 	language=Erlang,                % choose the language of the code
 	basicstyle=\ttfamily\footnotesize\color{black},       % the size of the fonts that are used for the code
@@ -27,7 +31,6 @@
 	numberstyle=\color{black}\footnotesize,      % the size of the fonts that are used for the line-numbers
 	stepnumber=1,                   % the step between two line-numbers. If it is 1 each line will be numbered
 	numbersep=3pt,                  % how far the line-numbers are from the code
-	backgroundcolor=\color{lbcolor},  % choose the background color. You must add \usepackage{color}
 	showspaces=false,               % show spaces adding particular underscores
 	showstringspaces=false,         % underline spaces within strings
 	showtabs=false,                 % show tabs within strings adding particular underscores
@@ -39,7 +42,8 @@
 	escapeinside={\%*}{*)},         % if you want to add a comment within your code
 	keywordstyle=\color{red},
 	commentstyle=\color{mygray},
-	stringstyle=\color{black}
+	stringstyle=\color{black},
+	backgroundcolor=\color{code_backgrond}
 }
 
 % Generate the glossary
