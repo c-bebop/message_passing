@@ -64,6 +64,7 @@
 \newacronym{fifo}{FIFO}{First In - First Out}
 \newacronym{pid}{pid}{Process Identifier}
 \newacronym{mpif}{MPIF}{Message-Passing Interface Forum}
+\newacronym{hpc}{HPC}{High-Performance Computing}
 
 % GLOSSAR END
 
@@ -152,11 +153,13 @@ Communication in distributed systems defines a distributed system itself: N syst
 
 \section{\scshape{\textcolor{blue}{Message-Passing Interface Standard}}} \label{message_passing_interface}
 
-The \gls{mpi} is a message-passing library interface specification, made for high performance and scalable distributed systems where high-efficiency is needed.  The \gls{mpi} standard was designed by the \gls{mpif} which is an open group with representatives from many organizations. The current version of the \gls{mpi} standard is MPI-3.0 \cite[ch. Abstract/ii \& Acknowledgements/xx \& 1.1 on p. 1]{mpi}.\\
+To pass messages between processes is adding large overhead to the communication model. Nevertheless, providing a well defined interface to control exactly how messages are passed regains the ability to write \gls{hpc} applications.\\
 
-\noindent The \gls{mpif} aims to offer a standard which establishes a practical, portable, efficient and flexible way of implementing message-passing in various high-level programming languages (e.g. C, C++, Fortran) \cite[ch. History/iii]{mpi}. Furthermore, the \gls{mpi} simplifies the communication primitives and brings them to an abstraction level to perfectly fit the programmer's needs of writing efficient and clean code for such distributed systems \cite{tanenbaum}.\\
+\noindent The \gls{mpi} is a message-passing library interface specification, made for high performance and scalable distributed systems where high-efficiency is needed.  The \gls{mpi} standard was designed by the \gls{mpif} which is an open group with representatives from many organizations. The current version of the \gls{mpi} standard is MPI-3.0 \cite[ch. Abstract/ii \& Acknowledgements/xx \& 1.1 on p. 1]{mpi}.\\
 
-\noindent \gls{tcp} does not fit those requirements. While the socket primitives \textit{read} and \textit{write} are sufficient for several general-purpose protocols, (managing the communication across networks) they are insufficient for high-speed interconnection networks such as super computers or server clusters. The \gls{mpi} standard offers a set of functions and datatypes with which the software developer is able to explicitly execute synchronous and asynchronous message passing routines \cite[ch. 4.3 on p. 143]{tanenbaum}.\\
+\noindent The \gls{mpif} aims to offer a standard which establishes a practical, portable, efficient and flexible way of implementing message-passing in various high-level programming languages (e.g. C, C++, Fortran) \cite[ch. History/iii]{mpi}. Furthermore, the \gls{mpi} simplifies the communication primitives and brings them to an abstraction level to perfectly fit the programmer's needs of writing efficient and clean code for such \gls{hpc} distributed systems \cite[ch. 4.3.1 on p 143]{tanenbaum}.\\
+
+\noindent \gls{tcp} does not fit those requirements. While the socket primitives \textit{read} and \textit{write} are sufficient for several general-purpose protocols, (managing the communication across networks) they are insufficient for high-speed interconnection networks such as super computers or server clusters. The \gls{mpi} standard offers a set of functions and datatypes with which the software developer is able to explicitly execute synchronous and asynchronous message passing routines \cite[ch. 4.3 on p. 143]{tanenbaum}.
 
 \section{\scshape{\textcolor{blue}{Message Passing in Erlang}}} \label{erlang}
 
