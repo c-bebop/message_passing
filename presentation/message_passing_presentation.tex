@@ -48,12 +48,69 @@ linkcolor=blue
 \tableofcontents
 \end{frame}
 
-\section{Section Title}
+\section{Introduction}
 \begin{frame}
 
-\frametitle{Frame Title}
+\frametitle{Introduction}
+
+What is message passing?\\
+\pause
+Message passing in distributed systems
+\pause
+
+\end{frame}
+
+\section{Requirements in Theory}
+\begin{frame}
+
+\frametitle{Requirements in Theory}
+
+\begin{itemize}
+\item Connectivity
+\pause
+\item Ability
+\pause
+\item Integrity
+\pause
+\item Intelligibility
+\end{itemize}
 
 \pause
+Executability is not part of the message passing model!
+
+
+\end{frame}
+
+\section{Requirements Provider in Practice}
+\begin{frame}
+
+\frametitle{Requirements Provider in Practice}
+
+TCP/IP provides several \textit{socket primitives}:
+
+\begin{itemize}
+\item Connectivity: \textit{Socket} and \textit{Bind}
+\pause
+\item Ability: \textit{Send} and \textit{Receive}
+\pause
+\item Integrity: Several mechanisms provided
+\pause
+\item Intelligibility: Do not fall within the responsibility of TCP/IP
+\end{itemize}
+
+\pause
+There is still plenty to discuss!
+
+\end{frame}
+
+\section{Asynchronous vs. Synchronous Message Passing}
+\begin{frame}
+
+\frametitle{Asynchronous vs. Synchronous Message Passing}
+
+Synchronous: Communication primitives called directly\\
+Asynchronous: Middleware takes place\\
+Message Queues
 
 \end{frame}
 
