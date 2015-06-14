@@ -91,11 +91,11 @@ Message passing in distributed systems is a model to exchange messages within a 
 
 \newpage
 
-\section{\scshape{\textcolor{blue}{Message Oriented Communication}}} \label{introduction}
+\section{\scshape{\textcolor{blue}{Message Passing}}} \label{introduction}
 
 \subsection{\scshape{\textcolor{blue}{Introduction}}}
 
-To provide services and execute tasks, a distributed system has to have a proficient communication model implementation. There are several models of communication in distributed systems such as \gls{rpc} or object method invocation \cite[chap. 4.3 / p. 203]{tanenbaum}. With this paper I'm giving an  introduction to the communication model \textit{message passing}.\\
+To provide services and execute tasks, a distributed system has to have a proficient communication model implementation. There are several models of communication in distributed systems such as \gls{rpc} or object method invocation \cite[chap. 4.3 / p. 203]{tanenbaum}. With this paper I'm giving an  introduction to the communication models of \textit{message passing}.\\
 
 \noindent As human beings we already have a deep understanding of different models of message passing. While you read these words, I am passing a message to you, which seems to be a trivial thing to people who can read. In more philosophical terms, now that you are reading those words, a message is being passed from one entity (me, the writer) to another entity (you, the reader) which is obviously non trivial considering all the assumptions we would have to make to actually realize this message passing model between human beings.\\
 
@@ -103,7 +103,7 @@ To provide services and execute tasks, a distributed system has to have a profic
 
 \subsection{\scshape{\textcolor{blue}{Requirements in Theory}}}
 
-\noindent The following items are the theoretical basic requirements for a message passing model providing the functionality of message passing:
+\noindent The following items are the theoretical basic requirements for a message passing model:
 
 \begin{itemize}
 
@@ -114,13 +114,15 @@ To provide services and execute tasks, a distributed system has to have a profic
 
 \end{itemize}
 
+\noindent I intentionally left out the requirement of executability without there is no effect when the message is passed. To call the desired instructions in the receiving process is an implementation detail of executed code and thus not a requirement of the message passing model.
+
 \subsection{\scshape{\textcolor{blue}{Requirements Provider in Practice}}}
 
-\noindent To provide the above mentioned requirements there several message passing models resulting in well defined standards and concrete implementations have been developed in the last decades. To facilitate understanding the relations between the theoretical requirements and a concrete implementation, I will choose the \gls{tcp} which uses several socket primitives as example \cite[chap 4.3.1 on p. 141 - 142]{tanenbaum}:
+\noindent To provide the above mentioned requirements several message passing models resulting in well defined standards and concrete implementations have been developed in the last decades. To facilitate understanding the relations between the theoretical requirements and a concrete implementation, I chose the \gls{tcp} which uses several socket primitives as example \cite[chap 4.3.1 on p. 141 - 142]{tanenbaum}:
 
 \begin{itemize}
 
-\item \textbf{Connectivity}: \gls{tcp} provides the \textit{Socket} primitive to create that end point and also the \textit{Bind} primitive to bind a local address to that socket. The \textit{Connect} primitive then provides the functionality to establish a connection.
+\item \textbf{Connectivity}: \gls{tcp} provides the \textit{Socket} primitive creating a socket end point and also the \textit{Bind} primitive to bind a local address to that socket. The \textit{Connect} primitive then provides the functionality to establish a connection.
 
 \item \textbf{Ability}: \gls{tcp} provides the two primitives \textit{Send} and \textit{Receive} to simply send and receive data via the connection.
 
@@ -128,31 +130,33 @@ To provide services and execute tasks, a distributed system has to have a profic
 
 \end{itemize}
 
-\noindent The requirements of \textbf{Intelligibility} and \textbf{Executability} do not fall within the responsibility of \gls{tcp} and thus other standards have to take place, such as \gls{xml} or \gls{json} to structure the messages in a standardized manner, and the message parsing implementation which enables the process to execute the desired instructions.\\
+\noindent The requirements of \textbf{Intelligibility} do not fall within the responsibility of \gls{tcp} and thus other standards have to take place, such as \gls{xml} or \gls{json} to structure the messages in a standardized manner.\\
 
 \noindent There are other socket primitives than the above mentioned to provide the functionality of \gls{tcp} \cite[ch. 4.3.1 on p. 141]{tanenbaum}. The referenced book \cite{tanenbaum} provides useful and valuable information on this topic.\\
 
-\noindent It is also important to understand that this was just a round-up of how one can make basic use of the socket primitives to implement message passing in an application. There is plenty to discuss about how message passing is realized, such as the \gls{osi} which was developed by the \gls{iso} to model the different layers of network oriented communication \cite[ch. 4.1.1 on p. 116]{tanenbaum}. Furthermore, the \gls{os} has to reserve local memory to provide a buffer for the in- and outgoing messages.
+\noindent It is also important to understand that this was just a round-up of how one can make use of the socket primitives to implement message passing in an application. There is plenty to discuss about how message passing is realized, such as the \gls{osi} which was developed by the \gls{iso} to model the different layers of network oriented communication \cite[ch. 4.1.1 on p. 116]{tanenbaum}. Furthermore, an important detail is that the \gls{os} has to reserve local memory to provide a buffer for the in- and outgoing messages.
 
 \subsection{\scshape{\textcolor{blue}{Asynchronous vs. Synchronous Message Passing}}}
 
-\noindent After discussing a protocol to handle the socket primitives, it is necessary to consider one major difference in message passing models, which is whether to use asynchronous or synchronous message passing. Passing a message synchronously means that the called message send routine returns after the request has been successfully transmitted (or an error occurred). Receiving a message synchronously means that the called message receiving routine reads a specific amount of bytes from the socket and returns that message.\\
+\noindent After discussing a protocol to handle the socket primitives, it is necessary to consider one major difference in message passing models, which is whether to use asynchronous or synchronous message passing. Passing a message synchronously means that the called \textit{message send routine} returns after the request has been successfully transmitted (or an error occurred). Receiving a message synchronously means that the called message receiving routine reads a specific amount of bytes from the socket and returns that message.\\
 
 \noindent To pass or receive a message asynchronously, an additional application layer i.e. middleware is introduced. The call of a send routine can either return when the middleware took over the transmission of the request, or when it successfully sent the request to the receiver, or when it successfully sent the request to the receiver, assuring this by a corresponding message \cite[ch. 4.1 on p. 125]{tanenbaum}.\\
 
 \noindent The middleware can also perform some preparatory work e.g. separating stand-alone request bit strings and parsing them into a data structure and returning it when calling the receive routine of the message passing middleware.\\
 
-\noindent One key model to provide such middleware functionalities are message queues. A message queue is a queue to store messages by the \gls{fifo} principle. This enables the application to asynchronously send and receive messages by offering an incoming message queue and an outgoing message queue. This makes all the send and receive mechanisms fully transparent to the application \cite[ch. 4.3.2 on p. 145 - 147]{tanenbaum}.
+\noindent One key model to provide such middleware facilities are message queues. A message queue is a queue to store messages by the \gls{fifo} principle. This enables the application to asynchronously send and receive messages by offering an incoming message queue and an outgoing message queue. This makes all the send and receive mechanisms fully transparent to the application \cite[ch. 4.3.2 on p. 145 - 147]{tanenbaum}.
 
 \section{\scshape{\textcolor{blue}{Message-Passing Interface Standard}}} \label{message_passing_interface}
 
 To pass messages between processes is adding large overhead to the communication model. Nevertheless, providing a well defined interface to control exactly how messages are passed regains the ability to write \gls{hpc} applications.\\
 
-\noindent The \gls{mpi} is a message-passing library interface specification, created for high performance and scalable distributed systems where high-efficiency is needed.  The \gls{mpi} standard was designed by the \sloppy \gls{mpif} which is an open group with representatives from many organizations. The current version of the \gls{mpi} standard is MPI-3.0 \cite[ch. Abstract/ii \& ch. Acknowledgements/xx \& ch. 1.1 on p. 1]{mpi}.\\
+\noindent The \gls{mpi} is a message-passing library interface specification, created for high performance and scalable distributed systems where high-efficiency is needed.  The \gls{mpi} standard was designed by the \sloppy \gls{mpif} which is an open group with representatives from many organizations. The current version of the \gls{mpi} standard is MPI-3.0 \cite[ch. Abstract/ii \& ch. Acknowledgements/xx \& ch. 1.1 on p. 1 \& ch. 1.2 on p. 2]{mpi}.\\
 
 \noindent The \gls{mpif} aims to offer a standard which establishes a practical, portable, efficient and flexible way of implementing message-passing in various high-level programming languages (e.g. C, C++, Fortran) \cite[ch. History/iii]{mpi}. Furthermore, the \gls{mpi} simplifies the communication primitives and brings them to an abstraction level to perfectly fit the programmer's needs of writing efficient and clean code for such \gls{hpc} distributed systems \cite[ch. 4.3.1 on p 143]{tanenbaum}.\\
 
-\noindent \gls{tcp} does not fit those requirements. While the socket primitives \textit{read} and \textit{write} are sufficient for several general-purpose protocols (managing the communication across networks), they are insufficient for high-speed interconnection networks such as super computers or server clusters. The \gls{mpi} standard offers a set of functions and datatypes with which the software developer is able to explicitly execute synchronous and asynchronous message passing routines \cite[ch. 4.3 on p. 143]{tanenbaum}.
+\noindent \gls{tcp} does not fit those requirements. While the socket primitives \textit{read} and \textit{write} are sufficient for several general-purpose protocols (managing the communication across networks), they are insufficient for high-speed interconnection networks such as super computers or server clusters. The \gls{mpi} standard offers a set of functions and datatypes with which the software developer is able to explicitly execute synchronous and asynchronous message passing routines \cite[ch. 4.3 on p. 143]{tanenbaum}.\\
+
+\noindent The \gls{mpif} offers a very detailed technical report \cite{mpi} of the \gls{mpi} standard which is not only defining the standard but offers detailed information on the organization and motivation.
 
 \section{\scshape{\textcolor{blue}{Definition}}}
 
@@ -165,10 +169,12 @@ The given task of Prof. Dr. Christin Schmidt was to write a technical report def
 \noindent However, no message passing model defines the medium that transports the messages nor the outcome of a message and thus the following delimitation has to be made:
 
 \begin{quote}
-\textit{The physical conditions and the implementation of executing the desired instructions is not defined by the used message passing model.}
+\textit{The physical conditions and the implementation of executing the desired instructions is not defined by any message passing model.}
 \end{quote}
 
 \section{\scshape{\textcolor{blue}{Message Passing in Erlang}}} \label{erlang}
+
+The above written discussions always led to the conclusion that message passing is not only adding computational overhead but also adds a lot of things the programmer has to keep track of. The message passing model implemented in Erlang simplifies and abstracts the use of message passing so the programmer can again focus on the application logic.
 
 \subsection{\scshape{\textcolor{blue}{Introduction}}}
 
