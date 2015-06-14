@@ -62,7 +62,7 @@
 \newacronym{osi}{OSI}{Open Systems Interconnection Reference Model}
 \newacronym{iso}{ISO}{International Organization for Standardization}
 \newacronym{fifo}{FIFO}{First In - First Out}
-\newacronym{pid}{pid}{Process Identifier}
+\newacronym{pid}{PID}{Process Identifier}
 \newacronym{mpif}{MPIF}{Message-Passing Interface Forum}
 \newacronym{hpc}{HPC}{High-Performance Computing}
 
@@ -95,7 +95,7 @@ Message passing in distributed systems is a model to exchange messages within a 
 
 \subsection{\scshape{\textcolor{blue}{Introduction}}}
 
-To provide services and execute tasks, a distributed system has to have a proficient communication model implementation. There are several models of communication in distributed systems such as \gls{rpc} or object method invocation \cite[chap. 4.3 / p. 203]{tanenbaum}. With this paper I'm giving an  introduction to the communication models of \textit{message passing}.\\
+To provide services and execute tasks, a distributed system has to have a proficient communication model implementation. There are several models of communication in distributed systems such as \gls{rpc} or object method invocation \cite[chap. 4.3 / p. 203]{tanenbaum}. With this paper I am giving an  introduction to the communication models of \textit{message passing}.\\
 
 \noindent As human beings we already have a deep understanding of different models of message passing. While you read these words, I am passing a message to you, which seems to be a trivial thing to people who can read. In more philosophical terms, now that you are reading those words, a message is being passed from one entity (me, the writer) to another entity (you, the reader) which is obviously non trivial considering all the assumptions we would have to make to actually realize this message passing model between human beings.\\
 
@@ -114,11 +114,11 @@ To provide services and execute tasks, a distributed system has to have a profic
 
 \end{itemize}
 
-\noindent I intentionally left out the requirement of executability without there is no effect when the message is passed. To call the desired instructions in the receiving process is an implementation detail of executed code and thus not a requirement of the message passing model.
+\noindent I intentionally left out the requirement of executability without which there is no effect when the message is passed. It is an implementation detail of the executed program code to call the desired instructions in the receiving process, and thus not a requirement of the message passing model in itself.
 
 \subsection{\scshape{\textcolor{blue}{Requirements Provider in Practice}}}
 
-\noindent To provide the above mentioned requirements several message passing models resulting in well defined standards and concrete implementations have been developed in the last decades. To facilitate understanding the relations between the theoretical requirements and a concrete implementation, I chose the \gls{tcp} which uses several socket primitives as example \cite[chap 4.3.1 on p. 141 - 142]{tanenbaum}:
+\noindent To provide the requirements mentioned above several message passing models resulting in well defined standards and concrete implementations have been developed in the last decades. To facilitate understanding the relations between the theoretical requirements and a concrete implementation, I chose the \gls{tcp} which uses several socket primitives as example \cite[chap 4.3.1 on p. 141 - 142]{tanenbaum}:
 
 \begin{itemize}
 
@@ -134,21 +134,21 @@ To provide services and execute tasks, a distributed system has to have a profic
 
 \noindent There are other socket primitives than the above mentioned to provide the functionality of \gls{tcp} \cite[ch. 4.3.1 on p. 141]{tanenbaum}. The referenced book \cite{tanenbaum} provides useful and valuable information on this topic.\\
 
-\noindent It is also important to understand that this was just a round-up of how one can make use of the socket primitives to implement message passing in an application. There is plenty to discuss about how message passing is realized, such as the \gls{osi} which was developed by the \gls{iso} to model the different layers of network oriented communication \cite[ch. 4.1.1 on p. 116]{tanenbaum}. Furthermore, an important detail is that the \gls{os} has to reserve local memory to provide a buffer for the in- and outgoing messages.
+\noindent It is also important to understand that this was just a round-up of how one can make use of the socket primitives to implement message passing in an application. There is plenty to discuss about how message passing is realized, such as the \gls{osi} which was developed by the \gls{iso} to model the different layers of network oriented communication \cite[ch. 4.1.1 on p. 116]{tanenbaum}. Furthermore, an important detail is that the \gls{os} has to reserve local memory to provide a buffer for the incoming and outgoing messages.
 
 \subsection{\scshape{\textcolor{blue}{Asynchronous vs. Synchronous Message Passing}}}
 
-\noindent After discussing a protocol to handle the socket primitives, it is necessary to consider one major difference in message passing models, which is whether to use asynchronous or synchronous message passing. Passing a message synchronously means that the called \textit{message send routine} returns after the request has been successfully transmitted (or an error occurred). Receiving a message synchronously means that the called message receiving routine reads a specific amount of bytes from the socket and returns that message.\\
+\noindent After discussing a protocol to handle the socket primitives, it is necessary to consider one major difference in message passing models, which is whether to use asynchronous or synchronous message passing. Passing a message synchronously means that the called \textit{message send routine} returns after the request has been successfully transmitted. Receiving a message synchronously means that the called message receiving routine reads a specific amount of bytes from the socket and returns that message.\\
 
-\noindent To pass or receive a message asynchronously, an additional application layer i.e. middleware is introduced. The call of a send routine can either return when the middleware took over the transmission of the request, or when it successfully sent the request to the receiver, or when it successfully sent the request to the receiver, assuring this by a corresponding message \cite[ch. 4.1 on p. 125]{tanenbaum}.\\
+\noindent To pass or receive a message asynchronously, an additional application layer i.e. middleware is introduced. The call of a send routine can either return when the middleware took over the transmission of the request, or when it successfully sent the request to the receiver, or when it successfully sent the request to the receiver assuring this by a corresponding message \cite[ch. 4.1 on p. 125]{tanenbaum}.\\
 
 \noindent The middleware can also perform some preparatory work e.g. separating stand-alone request bit strings and parsing them into a data structure and returning it when calling the receive routine of the message passing middleware.\\
 
-\noindent One key model to provide such middleware facilities are message queues. A message queue is a queue to store messages by the \gls{fifo} principle. This enables the application to asynchronously send and receive messages by offering an incoming message queue and an outgoing message queue. This makes all the send and receive mechanisms fully transparent to the application \cite[ch. 4.3.2 on p. 145 - 147]{tanenbaum}.
+\noindent One key model to provide such middleware facilities are message queues. A message queue is a data structure to store messages in by the \gls{fifo} principle. This enables the application to asynchronously send and receive messages by offering an incoming message queue and an outgoing message queue. This makes all of the send and receive mechanisms fully transparent to the application \cite[ch. 4.3.2 on p. 145 - 147]{tanenbaum}.
 
 \section{\scshape{\textcolor{blue}{Message-Passing Interface Standard}}} \label{message_passing_interface}
 
-To pass messages between processes is adding large overhead to the communication model. Nevertheless, providing a well defined interface to control exactly how messages are passed regains the ability to write \gls{hpc} applications.\\
+Passing messages between processes adds significant overhead to the communication model. Nevertheless, providing a well defined interface to control exactly how messages are passed regains the ability to write \gls{hpc} applications.\\
 
 \noindent The \gls{mpi} is a message-passing library interface specification, created for high performance and scalable distributed systems where high-efficiency is needed.  The \gls{mpi} standard was designed by the \sloppy \gls{mpif} which is an open group with representatives from many organizations. The current version of the \gls{mpi} standard is MPI-3.0 \cite[ch. Abstract/ii \& ch. Acknowledgements/xx \& ch. 1.1 on p. 1 \& ch. 1.2 on p. 2]{mpi}.\\
 
@@ -160,7 +160,7 @@ To pass messages between processes is adding large overhead to the communication
 
 \section{\scshape{\textcolor{blue}{Definition}}}
 
-The given task of Prof. Dr. Christin Schmidt was to write a technical report defining the term \textit{Message Passing}. After discussing the theoretical basis and practical implementations, message passing in distributed systems appears to be a technical jargon term to characterize a communication model in distributed systems that deals with messages:
+The given task of Prof. Dr. Christin Schmidt was to write a technical report defining the term \textit{Message Passing}. After discussing the theoretical basis and practical implementations, message passing in distributed systems appears to be a technical term to characterize a communication model in distributed systems that deals with messages:
 
 \begin{quote}
 \textit{Message passing in distributed systems is a model to exchange messages within a process pair by making use of several standards and implementation details. The specifically used message passing model can diverge extremely in its provided facilities and defines how to establish the connection, send and receive messages.}
@@ -174,17 +174,15 @@ The given task of Prof. Dr. Christin Schmidt was to write a technical report def
 
 \section{\scshape{\textcolor{blue}{Message Passing in Erlang}}} \label{erlang}
 
-The above written discussions always led to the conclusion that message passing is not only adding computational overhead but also a number of things the programmer has to keep track of. The message passing model implemented in Erlang simplifies and abstracts the use of message passing which enables the programmer to keep the focus on application logic.
-
-% Motivation for writing this chapter???
+The preceding discourse repeatedly demonstrated that message passing does not only mean adding computational overhead but also a number of things the programmer has to keep track of. The message passing model implemented in Erlang simplifies and abstracts the use of message passing which enables the programmer to keep the focus on application logic. Erlang's transparent message passing model is therefore well suited as an illustration.
 
 \subsection{\scshape{\textcolor{blue}{Introduction}}}
 
-Erlang is a functional, declarative programming language that was written for the need of real-time, non-stop, concurrent, very large and distributed system applications \cite[chap. 1 / p. 1]{Armstrong96erlang}. While the language was originally designed by Joe Armstrong, Robert Virding and Mike Williams for Ericsson (a Swedish telecommunications provider) in 1986, it finally became open source in 1998, thanks to the open source initiatives lead by Linux \cite[chap. 8 on p. 39]{erl_history}.\\
+Erlang is a functional, declarative programming language written for the need of real-time, non-stop, concurrent, very large and distributed system applications \cite[chap. 1 / p. 1]{Armstrong96erlang}. While the language was originally designed by Joe Armstrong, Robert Virding and Mike Williams for Ericsson (a Swedish telecommunications provider) in 1986, it finally became open source in 1998, thanks to the open source initiatives lead by Linux \cite[chap. 8 on p. 39]{erl_history}.\\
 
 \noindent Joe Armstrong, who started to design Erlang by adding functionality to Prolog, named the new programming language after the Danish mathematician \sloppy Agner \sloppy Krarup  Erlang (creator of the Erlang loss formula) following the tradition of naming programming languages after dead mathematicians \cite[chap. 4.1 on p. 13]{erl_history}.\\
 
-\noindent Erlang uses a native, asynchronous message passing model to communicate between light weight processes, also called actors \cite[chap. 1 on p. 1]{Armstrong96erlang}. Erlang does not make heavy use of the executing \gls{os} to provide the described concurrency model, which implicitly means that Erlang decouples the underlying \gls{os} and thus providing a cross-platform and transparent message passing model \cite[chap. 1  \& 3 on p. 1 - 3]{Armstrong96erlang}.
+\noindent Erlang uses a native, asynchronous message passing model to communicate between light weight processes, also called actors \cite[chap. 1 on p. 1]{Armstrong96erlang}. Erlang does not make heavy use of the executing \gls{os} to provide the described concurrency model, which implicitly means that Erlang decouples the underlying \gls{os} and thus provides a cross-platform and transparent message passing model \cite[chap. 1  \& 3 on p. 1 - 3]{Armstrong96erlang}.
 
 \subsection{\scshape{\textcolor{blue}{Concurrency in Erlang}}}
 
@@ -193,22 +191,22 @@ Erlang is a functional, declarative programming language that was written for th
 \begin{itemize}
 
 \item \textcolor{red}{spawn}(\textit{Module}, \textit{Exported Function}, \textit{List of Arguments})\\
-Function which creates a new actor by running the \textit{Exported Function} with the \textit{List of Arguments} located in the \textit{Module} (a set of functions located in one file) returning the \gls{pid}, which uniquely identifies the created actor for addressing.
+A function which creates a new actor by running the \textit{Exported Function} with the \textit{List of Arguments} located in the \textit{Module} (a set of functions located in one file) returning the \gls{pid}, which uniquely identifies the created actor for addressing.
 
 \item The \textcolor{red}{receive} construct allows the function executed by an actor to receive messages by using a message queue.
 
 \item The \textcolor{red}{!} operator sends the right-handed term to the \sloppy left-handed \gls{pid}. The right-handed term is the sent message.
 
 \item \textcolor{red}{self}() \\
-Function returning the \gls{pid} of the actor executing the function.
+A function returning the \gls{pid} of the actor executing the function.
 
 \end{itemize}
 
-\noindent Although the semantics and functions described above may require some foreknowledge on the Erlang programming language, it was important for me to point out that Erlang is not only offering an easily intelligible interface for concurrency, it rather is a concurrent functional programming language. Nevertheless, there is plenty to discuss about the concurrency model of Erlang e.g. how to manage processes or handle errors. I recommend to take a look at the referenced official Erlang documentation \cite{erl_doc} or to \textit{learn you some Erlang} on \url{www.learnyousomeerlang.com}.
+\noindent Although the semantics and functions described above may require some foreknowledge on the Erlang programming language, it is important to point out that Erlang is not only offering an easily intelligible interface for concurrency, it rather is a concurrent functional programming language. Nevertheless, there is plenty to discuss about the concurrency model of Erlang e.g. how to manage processes or handle errors. It is recommended to take a look at the referenced official Erlang documentation \cite{erl_doc} or to \textit{learn you some Erlang} on \url{www.learnyousomeerlang.com}.
 
 \subsection{\scshape{\textcolor{blue}{Implementation of a Simple Diffie-Hellman Key Exchange Algorithm}}} \label{erlang_implementation}
 
-The following implementation of a Diffie-Hellman key exchange algorithm in Erlang is simplified. Please note that this Erlang application is not in any way acceptable as an adequate implementation of the Diffie-Hellman key exchange algorithm for use in the field! The code demonstrates the simplicity of implementing concurrent applications in Erlang by using message passing. Due to the need for a pow function returning the datatype \textit{Integer} I implemented my own pow function see Appendix \ref{my_math}. The sourcecode is hosted by Github:
+The following implementation of a Diffie-Hellman key exchange algorithm in Erlang is simplified. Please note that this Erlang application is not in any way acceptable as an adequate implementation of the Diffie-Hellman key exchange algorithm for use in the field! The code demonstrates the simplicity of implementing concurrent applications in Erlang by using message passing. Due to the need for a pow function returning the data type \textit{Integer} I implemented my own pow function, see Appendix \ref{my_math}. The sourcecode is hosted by Github:
 
 \begin{center}
 \url{https://github.com/c-bebop/message_passing}
@@ -220,7 +218,7 @@ The following implementation of a Diffie-Hellman key exchange algorithm in Erlan
 
 \subsection{\scshape{\textcolor{blue}{Running the Application}}}
 
-To run the applicatoin (\ref{erlang_implementation}) in a Linux shell one shall do the following (assuming that Erlang is already installed, help can be found at \url{http://www.erlang.org/doc/installation_guide/INSTALL.html}).
+To run the application (\ref{erlang_implementation}) in a Linux shell one shall do the following (assuming that Erlang is already installed, help can be found at \url{http://www.erlang.org/doc/installation_guide/INSTALL.html}).
 
 \subsubsection{Preparatory Work}
 
@@ -230,7 +228,7 @@ To run the applicatoin (\ref{erlang_implementation}) in a Linux shell one shall 
 $ erl -sname bob
 \end{lstlisting}
 
-\noindent Which will output (meta data depends of the executing system):
+\noindent This will output (meta data depends of the executing system):
 
 \begin{lstlisting}[language=bash]
 Erlang/OTP 17 [erts-6.3] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
@@ -259,7 +257,7 @@ To run the application on one node execute the \textit{startExample} function as
 {<0.50.0>,<0.51.0>}
 \end{lstlisting}
 
-\noindent Executing the function \textit{startExample} spawns a process that executes the \textit{listenKeyExchange} function with \textit{15} as the \textit{private key} and \textit{"Alice"} as the name and binds the returning \gls{pid} to the value called Alice. Afterwards, \textit{startExample} spawns another process that executes the \textit{startKeyExchange} function with \textit{23} for \textit{P}, \textit{5} for \textit{G}, \textit{6} for the \textit{private key}, the \gls{pid} of Alice and \textit{"Bob"} as the name which binds the returning \gls{pid} to the value called Bob. At the end the function returns the two pids of \textit{Alice} and \textit{Bob}. The produced output indicates that Alice has the \gls{pid} <0.50.0> and the calculated private key exchanged with Bob is 2. Bob has the \gls{pid} <0.51.0> and computed the same private key (please note that the returning \gls{pid} is not determined).
+\noindent Executing the function \textit{startExample} spawns a process that executes the \textit{listenKeyExchange} function with \textit{15} as the \textit{private key} and \textit{"Alice"} as the name and binds the returning \gls{pid} to the value called Alice. Afterwards, \textit{startExample} spawns another process that executes the \textit{startKeyExchange} function with \textit{23} for \textit{P}, \textit{5} for \textit{G}, \textit{6} for the \textit{private key}, the \gls{pid} of Alice and \textit{"Bob"} as the name which binds the returning \gls{pid} to the value called Bob. Eventually the function returns the two pids of \textit{Alice} and \textit{Bob}. The produced output indicates that Alice has the \gls{pid} <0.50.0> and the calculated private key exchanged with Bob is 2. Bob has the \gls{pid} <0.51.0> and computed the same private key (please note that the returning \gls{pid} is not determined).
 
 \subsubsection{On Two Nodes}
 
@@ -269,7 +267,7 @@ To run the application on one node execute the \textit{startExample} function as
 $ erl -sname alice
 \end{lstlisting}
 
-\noindent Which will output (meta data depends of the executing system):
+\noindent This will output (meta data depends of the executing system):
 
 \begin{lstlisting}[language=bash]
 Erlang/OTP 17 [erts-6.3] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
@@ -278,13 +276,13 @@ Eshell V6.3  (abort with ^G)
 (alice@localhost)1>
 \end{lstlisting}
 
-\noindent Now another Erlang shell runs on the node \textit{alice} where the source files shall be compiled, too. Switching to the Erlang shell on node \textit{bob} and executing the function \textit{startRemoteExample} with the atom \textit{alice@localhost} (specifies on which node the actor shall be spawned that executes the \textit{listenKeyExchange} function) as the transferred parameter as follows:
+\noindent Now another Erlang shell runs on the node \textit{alice} where the source files shall be compiled, too. Switching to the Erlang shell on node \textit{bob} and executing the function \textit{startRemoteExample} with the atom \textit{alice@localhost} as the transferred parameter as follows:
 
 \begin{lstlisting}[language=bash]
 (bob@localhost)4> diffie_hellman:startRemoteExample(alice@localhost).
 \end{lstlisting}
 
-\noindent Prints out the following:
+\noindent prints out the following:
 
 \begin{lstlisting}[language=bash]
 {<9879.54.0>,<0.58.0>}
@@ -292,13 +290,15 @@ Eshell V6.3  (abort with ^G)
 "Bob" (<0.58.0>): The shared private Key, exchanged with "Alice" is: 2
 \end{lstlisting}
 
-\noindent All transferred parameters are the same with the difference that the \textit{Alice} actor is now located on the node \textit{alice}. The output is still printed out in the \textit{bob} node, since the Erlang io system recognizes where the process is spawned from and sends all the output to it \cite[ch. 4.3.4 on p. 104]{erl_doc}.
+\noindent The atom \textit{alice@localhost} specifies on which node the actor shall be spawned that executes the \textit{listenKeyExchange} function
 
-\section{\scshape{\textcolor{blue}{Closing Remarks}}}
+\noindent Now the \textit{Alice} actor is located on the node \textit{alice}. The output is still printed out in the \textit{bob} node, since the Erlang io system recognizes where the process is spawned from and sends all the output to it \cite[ch. 4.3.4 on p. 104]{erl_doc}.
 
-% Should there be a closing remark??
+\section{\scshape{\textcolor{blue}{Personal Closing Remarks}}}
 
-\newpage
+\noindent With this technical report I do not presume describing message passing in its wholeness. Nevertheless, my goal was to introduce the reader to this field hoping to motivate implementing one's own applications that use message passing, as well as gaining deeper knowledge in this field. For instance, it remains to be discussed how the \gls{os} is involved in the process of message passing, how a message should be composed in the light of the occurrence of computational overhead and how to better manage concurrent applications in Erlang. This could be the subject-matter of subsequent technical reports.
+
+\newpage 
 
 \begin{appendix}
 
