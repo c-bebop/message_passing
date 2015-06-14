@@ -174,7 +174,9 @@ The given task of Prof. Dr. Christin Schmidt was to write a technical report def
 
 \section{\scshape{\textcolor{blue}{Message Passing in Erlang}}} \label{erlang}
 
-The above written discussions always led to the conclusion that message passing is not only adding computational overhead but also adds a lot of things the programmer has to keep track of. The message passing model implemented in Erlang simplifies and abstracts the use of message passing so the programmer can again focus on the application logic.
+The above written discussions always led to the conclusion that message passing is not only adding computational overhead but also a number of things the programmer has to keep track of. The message passing model implemented in Erlang simplifies and abstracts the use of message passing which enables the programmer to keep the focus on application logic.
+
+% Motivation for writing this chapter???
 
 \subsection{\scshape{\textcolor{blue}{Introduction}}}
 
@@ -191,18 +193,18 @@ Erlang is a functional, declarative programming language that was written for th
 \begin{itemize}
 
 \item \textcolor{red}{spawn}(\textit{Module}, \textit{Exported Function}, \textit{List of Arguments})\\
-Function which creates a new actor by running the \textit{Exported Function} with the \textit{List of Arguments} located in the \textit{Module} (a set of functions located in one file) and which returns the \gls{pid}, which uniquely identifies the created actor.\\
+Function which creates a new actor by running the \textit{Exported Function} with the \textit{List of Arguments} located in the \textit{Module} (a set of functions located in one file) returning the \gls{pid}, which uniquely identifies the created actor for addressing.
 
 \item The \textcolor{red}{receive} construct allows the function executed by an actor to receive messages by using a message queue.
 
-\item The \textcolor{red}{!} operator sends the right-handed term to the left handed \gls{pid}. The right-handed term is the sent message.
+\item The \textcolor{red}{!} operator sends the right-handed term to the \sloppy left-handed \gls{pid}. The right-handed term is the sent message.
 
 \item \textcolor{red}{self}() \\
 Function returning the \gls{pid} of the actor executing the function.
 
 \end{itemize}
 
-\noindent Although the semantics and functions described above may require some foreknowledge on the Erlang programming language, it was important for me to show that Erlang is not only offering an easily intelligible interface for concurrency, it rather is a concurrent functional programming language. Nevertheless, there is plenty to discuss about the concurrency model of Erlang e.g. how to manage processes or handle errors. I recommend to take a look at the referenced official Erlang documentation or to \textit{learn you some Erlang} on \url{www.learnyousomeerlang.com}.
+\noindent Although the semantics and functions described above may require some foreknowledge on the Erlang programming language, it was important for me to point out that Erlang is not only offering an easily intelligible interface for concurrency, it rather is a concurrent functional programming language. Nevertheless, there is plenty to discuss about the concurrency model of Erlang e.g. how to manage processes or handle errors. I recommend to take a look at the referenced official Erlang documentation \cite{erl_doc} or to \textit{learn you some Erlang} on \url{www.learnyousomeerlang.com}.
 
 \subsection{\scshape{\textcolor{blue}{Implementation of a Simple Diffie-Hellman Key Exchange Algorithm}}} \label{erlang_implementation}
 
@@ -224,7 +226,7 @@ To run the applicatoin (\ref{erlang_implementation}) in a Linux shell one shall 
 
 \noindent Open a Linux shell, go to the \textit{source} directory of the Erlang code and type:
 
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[language=bash, numbers=none]
 $ erl -sname bob
 \end{lstlisting}
 
@@ -237,7 +239,7 @@ Eshell V6.3  (abort with ^G)
 (bob@localhost)1> 
 \end{lstlisting}
 
-\noindent The option \textit{-sname bob} tells the Erlang shell to run on a node called \textit{bob}. First one shall compile the two modules and afterwards:
+\noindent The option \textit{-sname bob} tells the Erlang shell to run on a node called \textit{bob}. Now compile the two provided modules as follows:
 
 \begin{lstlisting}[language=bash]
 (bob@localhost)1> c(diffie_hellman).
@@ -257,7 +259,7 @@ To run the application on one node execute the \textit{startExample} function as
 {<0.50.0>,<0.51.0>}
 \end{lstlisting}
 
-\noindent Executing the function \textit{startExample} spawns a process that executes the \textit{listenKeyExchange} function with \textit{15} as the \textit{private key} and \textit{"Alice"} as the name and binds the returning \gls{pid} to the value called Alice. Afterwards, \textit{startExample} spawns another process that executes the \textit{startKeyExchange} function with \textit{23} for \textit{P}, \textit{5} for \textit{G}, \textit{6} for the \textit{private key}, the \gls{pid} of Alice and \textit{"Bob"} as the name which binds the returning \gls{pid} to the value called Bob. At the end the function returns the two pids of \textit{Alice} and \textit{Bob}. As we can see from the output, Alice has the \gls{pid} <0.50.0> and the calculated private key, exchanged with Bob is 2. Bob has the \gls{pid} <0.51.0> and has computed the same private key.
+\noindent Executing the function \textit{startExample} spawns a process that executes the \textit{listenKeyExchange} function with \textit{15} as the \textit{private key} and \textit{"Alice"} as the name and binds the returning \gls{pid} to the value called Alice. Afterwards, \textit{startExample} spawns another process that executes the \textit{startKeyExchange} function with \textit{23} for \textit{P}, \textit{5} for \textit{G}, \textit{6} for the \textit{private key}, the \gls{pid} of Alice and \textit{"Bob"} as the name which binds the returning \gls{pid} to the value called Bob. At the end the function returns the two pids of \textit{Alice} and \textit{Bob}. The produced output indicates that Alice has the \gls{pid} <0.50.0> and the calculated private key exchanged with Bob is 2. Bob has the \gls{pid} <0.51.0> and computed the same private key (please note that the returning \gls{pid} is not determined).
 
 \subsubsection{On Two Nodes}
 
