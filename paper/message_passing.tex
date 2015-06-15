@@ -95,11 +95,11 @@ Message passing in distributed systems is a model to exchange messages within a 
 
 \subsection{\scshape{\textcolor{blue}{Introduction}}}
 
-To provide services and execute tasks, a distributed system has to have a proficient communication model implementation. There are several models of communication in distributed systems such as \gls{rpc} or object method invocation \cite[chap. 4.3 / p. 203]{tanenbaum}. With this paper I am giving an  introduction to the communication models of \textit{message passing}.\\
+To provide services and execute tasks, a distributed system has to have a proficient communication model implementation. There are several models of communication in distributed systems. With this paper I am giving an introduction to different \textit{message-oriented message passing communication models} \cite[chap. 4.3 on p. 140 - 141]{tanenbaum}.\\
 
 \noindent As human beings we already have a deep understanding of different models of message passing. While you read these words, I am passing a message to you, which seems to be a trivial thing to people who can read. In more philosophical terms, now that you are reading those words, a message is being passed from one entity (me, the writer) to another entity (you, the reader) which is obviously non trivial considering all the assumptions we would have to make to actually realize this message passing model between human beings.\\
 
-\noindent Message passing in distributed systems is based on messages, composed of bit strings, exchanged within a process pair which would be the equivalent to the entity pair. It is important to understand that message passing is a model designed for \gls{ipc}. Whether those processes are located on one or on two systems, is irrelevant to the provided functionality.
+\noindent Message passing in distributed systems is based on messages, composed of bit strings, exchanged within a process pair which would be the equivalent to the entity pair. It is important to understand that message passing is a model designed for \gls{ipc}. Whether those processes are located on one or on two systems, is irrelevant to the provided functionality \cite[ch. 4 - 4.1.1 on p. 115 - 117]{tanenbaum}.
 
 \subsection{\scshape{\textcolor{blue}{Requirements in Theory}}}
 
