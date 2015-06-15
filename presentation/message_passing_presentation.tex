@@ -6,14 +6,19 @@
 % The theme of this presentation
 \usetheme{default}
 
+% Bibtex
+\usepackage{cite, authordate1-4}
+
 % Graphics package
 \usepackage{graphicx}
 
 \definecolor{blue}{cmyk}{0.81,0.26,0,0.48}
+\definecolor{red}{cmyk}{0,0.76,0.76,0.48}
 
 \setbeamercolor{title}{fg=white}
 \setbeamercolor{titlelike}{fg=white}
 \setbeamercolor{structure}{bg=blue}
+\setbeamercolor{itemize item}{fg=blue}
 
 \hypersetup{
 colorlinks=true,
@@ -53,10 +58,16 @@ linkcolor=blue
 
 \frametitle{Introduction}
 
+\begin{center}
 What is message passing?\\
 \pause
-Message passing in distributed systems
-\pause
+\vspace{6pt}
+What is message passing in distributed systems? \\
+\end{center}
+
+\begin{flushright}
+\cite{tanenbaum}
+\end{flushright}
 
 \end{frame}
 
@@ -99,8 +110,7 @@ TCP/IP provides several \textit{socket primitives}:
 \end{itemize}
 
 \pause
-There is still plenty to discuss!
-
+There is still plenty to discuss! \cite{tanenbaum}
 \end{frame}
 
 \section{Asynchronous vs. Synchronous Message Passing}
@@ -108,9 +118,110 @@ There is still plenty to discuss!
 
 \frametitle{Asynchronous vs. Synchronous Message Passing}
 
-Synchronous: Communication primitives called directly\\
-Asynchronous: Middleware takes place\\
-Message Queues
+\begin{itemize}
+\item Synchronous: \\
+Communication primitives called directly
+\pause
+\item Asynchronous: \\
+Middleware takes place (Message Queues)
+\end{itemize}
+
+\begin{flushright}
+\cite{tanenbaum}
+\end{flushright}
+
+\end{frame}
+
+\section{Message-Passing Interface Standard}
+
+\begin{frame}
+
+\frametitle{Message-Passing Interface Standard}
+
+\begin{itemize}
+\item designed by the Message-Passing Interface Forum
+\pause
+\item defines a set of functions and datatypes for message passing
+\pause
+\item aims High-Performance Computing Distributed Systems
+\end{itemize}
+
+\begin{flushright}
+\cite{mpi}\\
+\cite{tanenbaum}
+\end{flushright}
+
+\end{frame}
+
+\section{Definition}
+
+\begin{frame}
+
+\frametitle{Definition}
+
+\begin{center}
+\textit{Message passing in distributed systems is a model to exchange messages within a process pair by making use of several standards and implementation details. The specifically used message passing model can diverge extremely in its provided facilities and defines how to establish the connection, send and receive messages.}
+\end{center}
+\pause
+\begin{center}
+\textit{The physical conditions and the implementation of executing the desired instructions is not defined by any message passing model.}
+\end{center}
+
+\end{frame}
+
+\section{Erlang Programming Language}
+
+\begin{frame}
+
+\frametitle{Erlang Programming Language}
+
+\begin{itemize}
+\item functional
+\pause
+\item declarative
+\pause
+\item for real-time, non-stop, concurrent, very large and distributed system applications
+\end{itemize}
+
+\begin{flushright}
+\cite{Armstrong96erlang}\\
+\cite{erl_history}
+\end{flushright}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Concurrency in Erlang}
+
+\begin{itemize}
+
+\item Function \textcolor{red}{spawn}(\textit{Module}, \textit{Exported Function}, \textit{List of Arguments})
+\pause
+\item Construct \textcolor{red}{receive}
+\pause
+\item operator \textcolor{red}{!}
+\pause
+\item Function \textcolor{red}{self}()
+
+\end{itemize}
+
+\begin{flushright}
+\cite{erl_doc}\\
+\cite{erl}
+\end{flushright}
+
+\end{frame}
+
+\section{Live Demo}
+
+\begin{frame}
+
+\frametitle{Live Demo}
+
+\begin{center}
+Diffie-Hellman Key Exchange Algorithm implemented in Erlang
+\end{center}
 
 \end{frame}
 
@@ -119,17 +230,29 @@ Message Queues
 
 \frametitle{Q\&A}
 
+\begin{center}
 Thank you for your kind attention!\\
 Any Questions?
 
 \vfill
-\begin{center}
 This document was written with \LaTeX 
 \\Typeface: Open Sans by Steve Matteson.
 \end{center}
 
 \end{frame}
 
+\begin{frame}
+
+\frametitle{References}
+
+\begin{tiny}
+
+\bibliographystyle{authordate1}
+\bibliography{lib}
+
+\end{tiny}
+
+\end{frame}
 
 % etc
 \end{document}
