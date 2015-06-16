@@ -8,6 +8,8 @@
 %%%             the Diffie-Hellman key exchange algorithm and is
 %%%             part of my technical report 'Introductory Guide
 %%%             to Message Passing in Distributed Systems'.
+%%%             More information can be found on:
+%%% https://en.wikipedia.org/wiki/Diffie–Hellman_key_exchange 
 %%% @end
 %%% Created 2015-06-06
 
@@ -34,7 +36,6 @@
 %%% @doc  Returns the value G to the power of MySecretKey Modulo P 
 %%%       which is the public component key for the Diffie-Hellman 
 %%%       key exchange algorithm. 
-%%%       For more information see http://goo.gl/pzdiH
 %%% @end
 -spec computeMyPublicComponentKey(pos_integer(), pos_integer(), pos_integer()) -> pos_integer().
 computeMyPublicComponentKey(P, G, MySecretKey) ->
@@ -44,7 +45,6 @@ computeMyPublicComponentKey(P, G, MySecretKey) ->
 %%%       MySecretKey Modulo P which is the private
 %%%       shared key for the Diffie-Hellman key exchange
 %%%       algorithm.
-%%%       For more information see http://goo.gl/pzdiH.
 %%% @end
 -spec computeSharedPrivateKey(pos_integer(), pos_integer(), pos_integer()) -> pos_integer().
 computeSharedPrivateKey(P, ComponentKey, MySecretKey) ->
