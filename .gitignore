@@ -18,6 +18,9 @@
 *.out
 *.toc
 
+## C++ files
+*.o
+
 ## Intermediate documents:
 *.dvi
 *-converted-to.*
@@ -41,6 +44,7 @@
 *.synctex.gz
 *.synctex.gz(busy)
 *.pdfsync
+*.ps
 
 ## Auxiliary and intermediate files from other packages:
 
